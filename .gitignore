@@ -1,0 +1,15 @@
+.env
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.planning/
+.dev/
+# Local Claude Code settings (personal tooling, not source)
+.claude/settings.local.json
+# Persistent long-term memory store (live chat data, not source)
+data/

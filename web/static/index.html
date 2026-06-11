@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Speech Bot</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span class="logo-icon">&#9835;</span>
+                <h1>TikTok Speech Bot</h1>
+            </div>
+            <nav class="tabs">
+                <button class="tab active" data-tab="chat">Chat</button>
+                <button class="tab" data-tab="settings">Impostazioni</button>
+            </nav>
+            <div class="status-badge" id="status-badge">
+                <span class="pulse" id="status-pulse"></span>
+                <span id="status-text">Disconnesso</span>
+            </div>
+        </header>
+
+        <main>
+            <!-- ===== TAB: CHAT ===== -->
+            <section class="view active" id="view-chat">
+                <div class="card connect-card">
+                    <div class="connect-row">
+                        <div class="input-group">
+                            <label for="username-input">Username TikTok</label>
+                            <div class="input-with-prefix">
+                                <span class="input-prefix">@</span>
+                                <input type="text" id="username-input" placeholder="username">
+                            </div>
+                        </div>
+                        <div class="connect-buttons">
+                            <button id="btn-connect" class="btn btn-primary">Connetti</button>
+                            <button id="btn-pause" class="btn btn-warning" disabled>Pausa</button>
+                            <button id="btn-stop" class="btn btn-danger" disabled>Stop</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card chat-card">
+                    <div class="card-header">
+                        <h2>Chat Feed</h2>
+                        <span class="msg-counter" id="msg-counter">0 messaggi</span>
+                    </div>
+                    <div id="chat-log">
+                        <div class="chat-empty">In attesa di messaggi...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== TAB: IMPOSTAZIONI ===== -->
+            <section class="view" id="view-settings">
+                <div class="card settings-card">
+                    <div class="card-header">
+                        <h2>Impostazioni</h2>
+                        <button id="btn-save-settings" class="btn btn-small btn-save">Salva</button>
+                    </div>
+                    <div class="settings-body">
+                        <div class="setting-row">
+                            <label for="ai-model">Modello AI</label>
+                            <select id="ai-model"></select>
+                        </div>
+                        <div class="setting-row" id="openai-key-row">
+                            <label for="openai-key">OpenAI API Key</label>
+                            <div class="key-input">
+                                <input type="password" id="openai-key" placeholder="sk-..." autocomplete="off" spellcheck="false">
+                                <button type="button" id="toggle-openai-key" class="key-eye" title="Mostra/nascondi" aria-label="Mostra o nascondi la chiave">&#128065;</button>
+                            </div>
+                            <span class="setting-hint">Chiave da <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">platform.openai.com</a>. Resta solo sul tuo PC.</span>
+                        </div>
+                        <div class="setting-row" id="tavily-key-row">
+                            <label for="tavily-key">Tavily API Key <span class="label-tag">ricerca web</span></label>
+                            <div class="key-input">
+                                <input type="password" id="tavily-key" placeholder="tvly-..." autocomplete="off" spellcheck="false">
+                                <button type="button" id="toggle-tavily-key" class="key-eye" title="Mostra/nascondi" aria-label="Mostra o nascondi la chiave">&#128065;</button>
+                            </div>
+                            <span class="setting-hint">Opzionale. Abilita il tool di ricerca web. Chiave gratis su <a href="https://app.tavily.com" target="_blank" rel="noopener">tavily.com</a>.</span>
+                        </div>
+                        <div class="setting-row">
+                            <label for="tts-voice">Voce TTS</label>
+                            <select id="tts-voice">
+                                <optgroup label="Edge (cloud)">
+                                    <option value="it-IT-ElsaNeural">Elsa (IT femminile)</option>
+                                    <option value="it-IT-DiegoNeural">Diego (IT maschile)</option>
+                                    <option value="it-IT-IsabellaNeural">Isabella (IT femminile)</option>
+                                    <option value="en-US-JennyNeural">Jenny (EN femminile)</option>
+                                    <option value="en-US-GuyNeural">Guy (EN maschile)</option>
+                                </optgroup>
+                                <optgroup label="Supertonic (locale, CPU)">
+                                    <option value="supertonic:it:F1">Supertonic F1 (IT femminile)</option>
+                                    <option value="supertonic:it:F2">Supertonic F2 (IT femminile)</option>
+                                    <option value="supertonic:it:F3">Supertonic F3 (IT femminile)</option>
+                                    <option value="supertonic:it:M1">Supertonic M1 (IT maschile)</option>
+                                    <option value="supertonic:it:M2">Supertonic M2 (IT maschile)</option>
+                                    <option value="supertonic:it:M3">Supertonic M3 (IT maschile)</option>
+                                    <option value="supertonic:en:F1">Supertonic F1 (EN femminile)</option>
+                                    <option value="supertonic:en:M1">Supertonic M1 (EN maschile)</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="setting-row">
+                            <label for="system-prompt">System Prompt</label>
+                            <textarea id="system-prompt" rows="6" placeholder="Caricamento..."></textarea>
+                        </div>
+                        <div class="setting-row toggle-row">
+                            <label for="thank-followers">Ringrazia i nuovi follower</label>
+                            <input type="checkbox" id="thank-followers" class="toggle">
+                        </div>
+                        <div class="setting-row toggle-row">
+                            <label for="thank-gifts">Ringrazia i regali</label>
+                            <input type="checkbox" id="thank-gifts" class="toggle">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card memory-card">
+                    <div class="card-header">
+                        <h2>Memoria del bot</h2>
+                        <div class="card-header-actions">
+                            <span class="msg-counter" id="memory-count">0 voci</span>
+                            <button id="btn-refresh-memory" class="btn btn-small">Aggiorna</button>
+                            <button id="btn-clear-memory" class="btn btn-small btn-danger">Svuota</button>
+                        </div>
+                    </div>
+                    <div id="memory-list">
+                        <div class="chat-empty">Nessun ricordo salvato.</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
